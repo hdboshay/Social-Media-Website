@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: models/likes.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: models/likes.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * A module to handle requests requiring database access involving the likes table
+ * @module models/likes
+ * @author Josh
+ */
+const db = require('../helpers/database');
+
+/**
+ * Sends a query and values to a helper to get all the likes from the database
+ * @returns {object} mysqljs results object containing indexable rows
+ */
+async function getAllLikes() {
+    let query = "SELECT * FROM likes;"
+    let values = [];
+    const [likes] = await db.run_query(query, values)
+    return likes
+}
+
+/**
+ * Sends a query and values to a helper to get all the likes for a particular post from the database
+ * @param {number} post_id - id for post to be included in query
+ * @returns {object} mysqljs results object containing indexable rows
+ */
+async function getPostLikes(post_id) {
+    let query = "SELECT * FROM likes WHERE PostID = ?;"
+    let values = [post_id];
+    const [likes] = await db.run_query(query, values)
+    return likes
+}
+
+/**
+ * Sends a query and values to a helper to get the number of likes for a particular post from the database
+ * @param {number} post_id - id for post to be included in query
+ * @returns {number} mysqljs results object containing indexable rows
+ */
+async function getNumLikes(post_id) {
+    let query = "SELECT COUNT(*) AS c FROM likes WHERE PostID = ?;"
+    let values = [post_id];
+    const [likes] = await db.run_query(query, values)
+    return likes[0].c
+}
+
+
+
+
+//IS THIS NEEDED??????
+async function getLikeById(post_id, user_id) {
+    let query = "SELECT * FROM likes WHERE (PostID = ? AND UserID = ?);"
+    let values = [post_id, user_id];
+    const [likes] = await db.run_query(query, values)
+    return likes[0]
+}
+
+
+
+
+
+/**
+ * Sends a query and values to a helper to create a like for a particular post from the database
+ * @param {number} post_id - id for post to be included in query
+ * @param {number} user_id - id for user to be included in query
+ * @returns {object} mysqljs results object containing indexable rows
+ */
+async function createLike(post_id, user_id) {
+    let query = "INSERT INTO likes (PostID, UserID) VALUES (?,?);"
+    let values = [post_id, user_id];
+    const [likes] = await db.run_query(query, values)
+    return likes
+}
+
+/**
+ * Sends a query and values to a helper to get a like given a particular id from the database
+ * @param {number} like_id - id for post to be included in query
+ * @returns {object} mysqljs results object containing indexable rows
+ */
+async function getLikeByLikeId(like_id) {
+    let query = "SELECT * FROM likes WHERE (LikeID = ?);"
+    let values = [like_id];
+    const [likes] = await db.run_query(query, values)
+    return likes[0]
+}
+
+/**
+ * Sends a query and values to a helper to delete a like given a particular id from the database
+ * @param {number} like_id - id for post to be included in query
+ * @returns {object} mysqljs results object containing indexable rows
+ */
+async function deleteLike(like_id) {
+    let query = "DELETE FROM likes WHERE (LikeID = ?);"
+    let values = [like_id];
+    const [likes] = await db.run_query(query, values)
+    return likes
+}
+
+/**
+ * Sends a query and values to a helper to delete all likes given a particular post_id from the database
+ * @param {number} post_id - id for post to be included in query
+ * @returns {object} mysqljs results object containing indexable rows
+ */
+ async function deletePostLikes(post_id) {
+    let query = "DELETE FROM likes WHERE PostID = ?;"
+    let values = [post_id];
+    const [likes] = await db.run_query(query, values)
+    return likes
+}
+
+module.exports = {
+    getAllLikes,
+    getPostLikes,
+    getNumLikes,
+    getLikeById,
+    createLike,
+    getLikeByLikeId,
+    deleteLike,
+    deletePostLikes
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-controllers_auth.html">controllers/auth</a></li><li><a href="module-controllers_validation.html">controllers/validation</a></li><li><a href="module-helpers_database.html">helpers/database</a></li><li><a href="module-index.html">index</a></li><li><a href="module-models_comments.html">models/comments</a></li><li><a href="module-models_likes.html">models/likes</a></li><li><a href="module-models_posts.html">models/posts</a></li><li><a href="module-models_users.html">models/users</a></li></ul><h3>Global</h3><ul><li><a href="global.html#checkJWTToken">checkJWTToken</a></li><li><a href="global.html#checkUserAndPass">checkUserAndPass</a></li><li><a href="global.html#verifyPassword">verifyPassword</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Sun Jun 23 2024 17:19:43 GMT+0000 (GMT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

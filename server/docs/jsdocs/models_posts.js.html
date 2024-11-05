@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: models/posts.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: models/posts.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * A module to handle requests requiring database access involving the posts table
+ * @module models/posts
+ * @author Josh
+ */
+const db = require('../helpers/database');
+
+/**
+ * Sends a query and values to a helper to get username for a particular user id from the database
+ * Then adds the username to the post in the list before returning it
+ * @param {number} posts - id for post to be included in query
+ * @returns {object} mysqljs results object containing indexable rows
+ */
+async function addUsername(posts){
+    for (const post of posts) 
+    {
+        let query = "SELECT Username FROM users WHERE UserID = ?;"
+        let values = [post.UserID];
+        const [user] = await db.run_query(query, values)
+        post.Username = user[0].Username
+    }
+    return posts
+}
+
+/**
+ * Sends a query and values to a helper to get all the posts from the database
+ * @returns {object} mysqljs results object containing indexable rows
+ */
+async function getAllPosts() {
+    let query = "SELECT * FROM posts ORDER BY PostID DESC;"
+    let values = [];
+    const [posts] = await db.run_query(query, values)
+    return addUsername(posts)
+}
+
+/**
+ * Sends a query and values to a helper to get a post given a particular id from the database
+ * @param {number} post_id - id for post to be included in query
+ * @returns {object} mysqljs results object containing indexable rows
+ */
+async function getPostById(post_id) {
+    let query = "SELECT * FROM posts WHERE PostID = ?;"
+    let values = [post_id];
+    const [post] = await db.run_query(query, values)
+    return post[0]
+}
+
+/**
+ * Sends a query and values to a helper to ge posts for a particular user id from the database
+ * @param {number} user_id - id for post to be included in query
+ * @returns {object} mysqljs results object containing indexable rows
+ */
+async function getPostsByUser(user_id) {
+    let query = "SELECT * FROM posts WHERE UserID = ? ORDER BY PostID DESC;"
+    let values = [user_id];
+    const [posts] = await db.run_query(query, values)
+    return addUsername(posts)
+}
+
+/**
+ * Sends a query and values to a helper to create a post from the database
+ * @param {number} user_id - id for post to be included in query
+ * @param {string} post_content - post content for comment to be included in query
+ * @returns {object} mysqljs results object containing indexable rows
+ */
+async function createPost(user_id, post_content, image_url) {
+    let query = "INSERT INTO posts (UserID, PostContent, ImageURL) VALUES (?, ?, ?);"
+    let values = [user_id, post_content, image_url];
+    const [result] = await db.run_query(query, values)
+    const post_id = result.insertId
+
+    return getPostById(post_id)
+}
+
+/**
+ * Sends a query and values to a helper to delete a comment given a particular id from the database
+ * @param {number} post_id - id for post to be included in query
+ * @returns {object} mysqljs results object containing indexable rows
+ */
+async function deletePost(post_id) {
+    let query = "DELETE FROM posts WHERE PostID = ?;"
+    let values = [post_id];
+    const [result] = await db.run_query(query, values)
+
+    return result
+}
+
+module.exports = {
+    getAllPosts, 
+    getPostById, 
+    getPostsByUser, 
+    createPost, 
+    deletePost
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-controllers_auth.html">controllers/auth</a></li><li><a href="module-controllers_validation.html">controllers/validation</a></li><li><a href="module-helpers_database.html">helpers/database</a></li><li><a href="module-index.html">index</a></li><li><a href="module-models_comments.html">models/comments</a></li><li><a href="module-models_likes.html">models/likes</a></li><li><a href="module-models_posts.html">models/posts</a></li><li><a href="module-models_users.html">models/users</a></li></ul><h3>Global</h3><ul><li><a href="global.html#checkJWTToken">checkJWTToken</a></li><li><a href="global.html#checkUserAndPass">checkUserAndPass</a></li><li><a href="global.html#verifyPassword">verifyPassword</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Sun Jun 23 2024 17:19:43 GMT+0000 (GMT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

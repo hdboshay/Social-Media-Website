@@ -1,0 +1,1146 @@
+openapi: "3.0.0"
+info:
+  title: Simple API overview
+  version: 2.0.0
+components:
+  securitySchemes:
+    basicAuth:     # <-- arbitrary name for the security scheme
+      type: http
+      scheme: basic
+    JWT:     # <-- arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+paths:
+  /posts/allPosts:
+    get:
+      summary: Retrieves all posts for non authorized users
+      tags:
+        - Posts
+      security: []
+      responses:
+        200:
+          description: Posts retrieved
+          content:
+            application/json:
+              schema:
+                properties:
+                  PostID:
+                    type: integer
+                  Username:
+                    type: string
+                  PostContent:
+                    type: string
+                  Created:
+                    type: string
+                  liked:
+                    type: boolean
+
+                  numLikes:
+                    type: integer
+                  numComments:
+                    type: integer
+
+                  uriGetLikes:
+                    type: string
+                  uriGetLikesAuth:
+                    type: string
+                  uriCreateLike:
+                    type: string
+                  canCreateLike:
+                    type: boolean
+                  uriDeleteLike:
+                    type: string
+                  canDeleteLike:
+                    type: boolean
+
+                  uriGetComments:
+                    type: string
+                  uriGetCommentsAuth:
+                    type: string
+                  uriCreateComment:
+                      type: string
+                  canCreateComment:
+                    type: boolean
+
+                  uriDeletePost:
+                    type: string
+                  canDeletePost:
+                    type: boolean
+              example: 
+                  [
+                    {
+                      PostID                  : 25,
+                      Username                : "user2",
+                      PostContent             : "this is a new post",
+                      Created                 : "2024-06-15T21:09:37.000Z",
+                      liked                   : false,
+
+                      numLikes                : 0,
+                      numComments             : 6,
+
+                      uriGetLikes             : "/likes/25",
+                      uriGetLikesAuth         : "/likes/private/3",
+                      uriCreateLike           : "",
+                      canCreateLike           : false,
+                      uriDeleteLike           : "",
+                      canDeleteLike           : false,
+
+                      uriGetComments          : "/comments/25",
+                      uriGetCommentsAuth      : "/comments/private/3",
+                      uriCreateComment        : "",
+                      canCreateComment        : false,
+
+                      uriDeletePost           : "/posts/25",
+                      canDeletePost           : true
+                    }
+                  ]
+        304:
+          description: Posts unchanged from cache
+          content:
+            application/json:
+              example: 
+                  null
+        404:
+          description: No posts retrieved
+  /posts/private/allPosts:
+    get:
+      summary: Retrieves all posts for authorized users
+      tags:
+        - Posts
+      security: 
+        - JWT: []
+      responses:
+        200:
+          description: Posts retrieved
+          content:
+            application/json:
+              schema:
+                properties:
+                  PostID:
+                    type: integer
+                  Username:
+                    type: string
+                  PostContent:
+                    type: string
+                  Created:
+                    type: string
+                  liked:
+                    type: boolean
+
+                  numLikes:
+                    type: integer
+                  numComments:
+                    type: integer
+
+                  uriGetLikes:
+                    type: string
+                  uriGetLikesAuth:
+                    type: string
+                  uriCreateLike:
+                    type: string
+                  canCreateLike:
+                    type: boolean
+                  uriDeleteLike:
+                    type: string
+                  canDeleteLike:
+                    type: boolean
+
+                  uriGetComments:
+                    type: string
+                  uriGetCommentsAuth:
+                    type: string
+                  uriCreateComment:
+                      type: string
+                  canCreateComment:
+                    type: boolean
+
+                  uriDeletePost:
+                    type: string
+                  canDeletePost:
+                    type: boolean
+              example: 
+                  [
+                    {
+                      PostID             : 3,
+                      Username           : "user3",
+                      PostContent        : "post from user 3",
+                      Created            : "2024-06-21T16:32:02.000Z",
+                      ImageURL           : "https://picsum.photos/id/237/200/300",
+                      liked              : false,
+
+                      numLikes           : 0,
+                      numComments        : 0,
+
+                      uriGetLikes        : "/likes/3",
+                      uriGetLikesAuth    : "/likes/private/3",
+                      uriCreateLike      : "/likes/private/3/1",
+                      canCreateLike      : true,
+                      uriDeleteLike      : "",
+                      canDeleteLike      : false,
+
+                      uriGetComments     : "/comments/3",
+                      uriGetCommentsAuth : "/comments/private/3",
+                      uriCreateComment   : "/comments/private/3/1",
+                      canCreateComment   : true,
+
+                      uriDeletePost      : "/posts/private/3",
+                      canDeletePost      : true
+                    }
+                  ]
+        304:
+          description: Posts unchanged from cache
+          content:
+            application/json:
+              example: 
+                  null
+        401:
+          description: User not authorized for that access
+        404:
+          description: No posts retrieved
+  /posts/:post_id:
+    get:
+      summary: Retrieves a post for a given post_id for non authorized users
+      tags:
+        - Posts
+      security: []
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Posts retrieved
+          content:
+            application/json:
+              schema:
+                properties:
+                  PostID:
+                    type: integer
+                  Username:
+                    type: string
+                  PostContent:
+                    type: string
+                  Created:
+                    type: string
+                  liked:
+                    type: boolean
+
+                  numLikes:
+                    type: integer
+                  numComments:
+                    type: integer
+
+                  uriGetLikes:
+                    type: string
+                  uriGetLikesAuth:
+                    type: string
+                  uriCreateLike:
+                    type: string
+                  canCreateLike:
+                    type: boolean
+                  uriDeleteLike:
+                    type: string
+                  canDeleteLike:
+                    type: boolean
+
+                  uriGetComments:
+                    type: string
+                  uriGetCommentsAuth:
+                    type: string
+                  uriCreateComment:
+                      type: string
+                  canCreateComment:
+                    type: boolean
+
+                  uriDeletePost:
+                    type: string
+                  canDeletePost:
+                    type: boolean
+              example: 
+                  [
+                    {
+                      PostID                  : 25,
+                      Username                : "user2",
+                      PostContent             : "this is a new post",
+                      Created                 : "2024-06-15T21:09:37.000Z",
+                      liked                   : false,
+
+                      numLikes                : 0,
+                      numComments             : 6,
+
+                      uriGetLikes             : "/likes/25",
+                      uriGetLikesAuth         : "/likes/private/3",
+                      uriCreateLike           : "",
+                      canCreateLike           : false,
+                      uriDeleteLike           : "",
+                      canDeleteLike           : false,
+
+                      uriGetComments          : "/comments/25",
+                      uriGetCommentsAuth      : "/comments/private/3",
+                      uriCreateComment        : "",
+                      canCreateComment        : false,
+
+                      uriDeletePost           : "/posts/25",
+                      canDeletePost           : true
+                    }
+                  ]
+        304:
+          description: Posts unchanged from cache
+          content:
+            application/json:
+              example: 
+                  null
+        404:
+          description: No posts retrieved
+  /posts/private/:user_id:
+    post:
+      summary: Creates a post for a given user with the given content
+      tags:
+        - Posts
+      security: 
+        - JWT: []
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                post_content:
+                  type: string
+            example:
+              {
+                post_content: this is an example post,
+              }
+      responses:
+        201:
+          description: Posts created
+          content:
+            application/json:
+              example: 
+                "post created"
+        400:
+          description: No post content found
+          content:
+            application/json:
+              example: 
+                "post_content was not found"
+        401:
+          description: User not authorized for that access
+        403:
+          description: User not permitted for that access
+  /posts/private/:post_id:
+    get:
+      summary: Retrieves a post for a given post_id for authorized users
+      tags:
+        - Posts
+      security: 
+        - JWT: []
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Posts retrieved
+          content:
+            application/json:
+              schema:
+                properties:
+                  PostID:
+                    type: integer
+                  Username:
+                    type: string
+                  PostContent:
+                    type: string
+                  Created:
+                    type: string
+                  liked:
+                    type: boolean
+
+                  numLikes:
+                    type: integer
+                  numComments:
+                    type: integer
+
+                  uriGetLikes:
+                    type: string
+                  uriGetLikesAuth:
+                    type: string
+                  uriCreateLike:
+                    type: string
+                  canCreateLike:
+                    type: boolean
+                  uriDeleteLike:
+                    type: string
+                  canDeleteLike:
+                    type: boolean
+
+                  uriGetComments:
+                    type: string
+                  uriGetCommentsAuth:
+                    type: string
+                  uriCreateComment:
+                      type: string
+                  canCreateComment:
+                    type: boolean
+
+                  uriDeletePost:
+                    type: string
+                  canDeletePost:
+                    type: boolean
+              example: 
+                  [
+                    {
+                      PostID                  : 25,
+                      Username                : "user2",
+                      PostContent             : "this is a new post",
+                      Created                 : "2024-06-15T21:09:37.000Z",
+                      liked                   : false,
+
+                      numLikes                : 0,
+                      numComments             : 6,
+
+                      uriGetLikes             : "/likes/25",
+                      uriGetLikesAuth         : "/likes/private/3",
+                      uriCreateLike           : "",
+                      canCreateLike           : false,
+                      uriDeleteLike           : "",
+                      canDeleteLike           : false,
+
+                      uriGetComments          : "/comments/25",
+                      uriGetCommentsAuth      : "/comments/private/3",
+                      uriCreateComment        : "",
+                      canCreateComment        : false,
+
+                      uriDeletePost           : "/posts/25",
+                      canDeletePost           : true
+                    }
+                  ]
+        304:
+          description: Posts unchanged from cache
+          content:
+            application/json:
+              example: 
+                null
+        401:
+          description: User not authorized for that access
+        404:
+          description: No posts retrieved
+    delete:
+      summary: Deletes given post
+      tags:
+        - Posts
+      security: 
+        - JWT: []
+      parameters:
+        - name: post_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Posts deleted
+        304:
+          description: Internal error, unable to delete post
+        400:
+          description: No post to delete
+        401:
+          description: User not authorized for that access
+        403:
+          description: User not permitted for that access
+        422:
+          description: Could not process post_id
+
+  /users/:
+    get:
+      summary: Retrieves all users
+      tags:
+        - Users
+      security:
+        - JWT: []
+      responses:
+        200:
+          description: Users retrieved
+          content:
+            application/json:
+              schema:
+                properties:
+                  UserID:
+                    type: integer
+                  role:
+                    type: string
+                  Username:
+                    type: string
+                  UserPassword:
+                    type: string
+                  Created:
+                    type: string
+              example:
+                  [
+                    {
+                      UserID       : 1,
+                      role         : "admin",
+                      Username     : "user1",
+                      UserPassword : "123",
+                      Created      : "2024-06-02T19:29:50.000Z"
+                    }
+                  ]
+        401:
+          description: User not authorized for that access
+        403:
+          description: User not permitted for that access
+        404:
+          description: No users retrieved
+  /users/getjwt/:username:
+    get:
+      summary: Retrieves JWT for user logging in
+      tags:
+        - Users
+      security: 
+        - basicAuth: []
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+
+      responses:
+        200:
+          description: Users retrieved
+          content:
+            application/json:
+              schema:
+                properties:
+                  jwt:
+                    type: string
+                  UserID:
+                    type: integer
+              example:
+                {
+                  jwt: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcxODYzNjA0OH0.2BzEnKxgux-XArwNl_yuLf5CtrAvb4wT1eJV5dgQ9hI",
+                  UserID: 1
+                }
+        401:
+          description: User not authorized for that access
+        404:
+          description: No user found
+  /users/byId/:id:
+    get:
+      summary: Retrieves user by their UserID
+      tags:
+        - Users
+      security: 
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: User retrieved
+          content:
+            application/json:
+              schema:
+                properties:
+                  UserID:
+                    type: integer
+                  role:
+                    type: string
+                  Username:
+                    type: string
+                  UserPassword:
+                    type: string
+                  Created:
+                    type: string
+              example: 
+                  {
+                    UserID       : 1,
+                    role         : "admin",
+                    Username     : "user1",
+                    UserPassword : "123",
+                    Created      : "2024-06-02T19:29:50.000Z"
+                  }
+        401:
+          description: User not authorized for that access
+        403:
+          description: User not permitted for that access
+        404:
+          description: No user retrieved
+  /users/byUsername/:username:
+    get:
+      summary: Retrieves user by their Username
+      tags:
+        - Users
+      security: 
+        - JWT: []
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: User retrieved
+          content:
+            application/json:
+              schema:
+                properties:
+                  UserID:
+                    type: integer
+                  role:
+                    type: string
+                  Username:
+                    type: string
+                  UserPassword:
+                    type: string
+                  Created:
+                    type: string
+              example: 
+                  {
+                    UserID       : 1,
+                    role         : "admin",
+                    Username     : "user1",
+                    UserPassword : "123",
+                    Created      : "2024-06-02T19:29:50.000Z"
+                  }
+        401:
+          description: User not authorized for that access
+        403:
+          description: User not permitted for that access
+        404:
+          description: No user retrieved
+  /users/create/user:
+    post:
+      summary: Creates user with user role given username, password and role
+      tags:
+        - Users
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                role:
+                  type: string
+            example:
+              {
+                username: user1,
+                password: 123,
+                role    : user
+              }
+      responses:
+        201:
+          description: User created
+          content:
+            application/json:
+              schema:
+                properties:
+                  UserID:
+                    type: integer
+                  role:
+                    type: string
+                  Username:
+                    type: string
+                  UserPassword:
+                    type: string
+                  Created:
+                    type: string
+              example: 
+                  {
+                    UserID       : 1,
+                    role         : "user",
+                    Username     : "user1",
+                    UserPassword : "123",
+                    Created      : "2024-06-02T19:29:50.000Z"
+                  }
+        304:
+          description: User with that username already exists
+        400:
+          description: Invalid request Body
+          content:
+            application/json:
+              schema:
+                properties:
+                  path:
+                    type: array
+                  property:
+                    type: string
+                  message:
+                    type: string
+                  schema:
+                    type: string
+                  instance:
+                    type: object
+                  name:
+                    type: string
+                  argument:
+                    type: string
+                  stack:
+                    type: string
+              example: 
+                  {
+                    path     : [],
+                    property : "instance",
+                    message  : "requires property \"username\"",
+                    schema   : "/users",
+                    instance : {},
+                    name     : "required",
+                    argument : "username",
+                    stack    : "instance requires property \"username\""
+                  }
+        401:
+          description: User not authorized for that access
+        403:
+          description: User not permitted for that access
+  /users/create/admin:
+    post:
+      summary: Creates user with any role given username, password and role
+      tags:
+        - Users
+      security:
+        - JWT: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                role:
+                  type: string
+            example:
+              {
+                username: user1,
+                password: 123,
+                role    : admin
+              }
+      responses:
+        201:
+          description: User created
+          content:
+            application/json:
+              schema:
+                properties:
+                  UserID:
+                    type: integer
+                  role:
+                    type: string
+                  Username:
+                    type: string
+                  UserPassword:
+                    type: string
+                  Created:
+                    type: string
+              example: 
+                  {
+                    UserID       : 1,
+                    role         : "user",
+                    Username     : "user1",
+                    UserPassword : "123",
+                    Created      : "2024-06-02T19:29:50.000Z"
+                  }
+        304:
+          description: User with that username already exists
+        400:
+          description: Invalid request Body
+          content:
+            application/json:
+              schema:
+                properties:
+                  path:
+                    type: array
+                  property:
+                    type: string
+                  message:
+                    type: string
+                  schema:
+                    type: string
+                  instance:
+                    type: object
+                  name:
+                    type: string
+                  argument:
+                    type: string
+                  stack:
+                    type: string
+              example: 
+                  {
+                    path     : [],
+                    property : "instance",
+                    message  : "requires property \"username\"",
+                    schema   : "/users",
+                    instance : {},
+                    name     : "required",
+                    argument : "username",
+                    stack    : "instance requires property \"username\""
+                  }
+        401:
+          description: User not authorized for that access
+        403:
+          description: User not permitted for that access
+  /users/:user_id:
+    delete:
+      summary: Delete user
+      tags:
+        - Users
+      security:
+        - JWT: []
+      responses:
+        200:
+          description: not permitted to delete your own account
+        401:
+          description: User not authorized for that access
+        403:
+          description: User not permitted for that access
+        404:
+          description: User does not exist
+
+  /likes/:post_id:
+    get:
+      summary: Retrieves all likes for a given post
+      tags:
+        - Likes
+      security: []
+      parameters:
+        - name: post_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Likes retrieved
+          content:
+            application/json:
+              schema:
+                properties:
+                  like_id:
+                    type: integer
+                  username:
+                    type: string
+                  uriDeleteLike:
+                    type: string
+                  showDeleteButton:
+                    type: boolean
+              example:
+                [
+                  {
+                    like_id          : 11,
+                    username         : "user2",
+                    uriDeleteLike    : "/likes/11",
+                    showDeleteButton : true
+                  }
+                ]
+        304:
+          description: Likes unchanged from cache
+          content:
+            application/json:
+              example: 
+                  null
+        404:
+          description: No post found
+          content:
+            application/json:
+              example: 
+                  "no post found"
+  /likes/private/:post_id:
+    get:
+      summary: Retrieves all likes for a given post
+      tags:
+        - Likes
+      security:
+        - JWT: []
+      parameters:
+        - name: post_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Likes retrieved
+          content:
+            application/json:
+              schema:
+                properties:
+                  like_id:
+                    type: integer
+                  username:
+                    type: string
+                  uriDeleteLike:
+                    type: string
+                  showDeleteButton:
+                    type: boolean
+              example:
+                [
+                  {
+                    like_id          : 11,
+                    username         : "user2",
+                    uriDeleteLike    : "/likes/11",
+                    showDeleteButton : true
+                  }
+                ]
+        304:
+          description: Likes unchanged from cache
+        401:
+          description: Request not authorized
+        404:
+          description: No post found
+  /likes/private/:post_id/:user_id:
+    post:
+      summary: Creates a like for a given post and user
+      tags:
+        - Likes
+      security: 
+        - JWT: []
+      parameters:
+        - name: post_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        201:
+          description: Like created
+        304:
+          description: Like already exists
+        401:
+          description: User not authorized for that access
+        403:
+          description: User not permitted for that access
+        404:
+          description: Post or user not found
+          content:
+            application/json:
+              examples:
+                user:
+                  value: "no user found"
+                post:
+                  value: "no post found"
+  /likes/private/:like_id:
+    delete:
+      summary: Deletes like with the given LikeID
+      tags:
+        - Likes
+      security: 
+        - JWT: []
+      parameters:
+        - name: like_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Like deleted
+        401:
+          description: User not authorized for that access
+        403:
+          description: User not permitted for that access
+        404:
+          description: No like to delete
+          content:
+            application/json:
+              example: 
+                  "no like to delete"
+
+  /comments/:post_id:
+    get:
+      summary: Retrieves all comments for a given post
+      tags:
+        - Comments
+      security: []
+      parameters:
+        - name: post_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Comments retrieved
+          content:
+            application/json:
+              schema:
+                properties:
+                  comment_id:
+                    type: integer
+                  username:
+                    type: string
+                  comment_content:
+                    type: string
+                  uriDeleteComment:
+                    type: string
+                  showDeleteButton:
+                    type: boolean
+              example:
+                [
+                  {
+                    comment_id       : 11,
+                    username         : "user2",
+                    comment_content  : "papi is helping",
+                    uriDeleteComment : "/comments/11",
+                    showDeleteButton : true
+                  }
+                ]
+        304:
+          description: Comments unchanged from cache
+          content:
+            application/json:
+              example: 
+                  null
+        404:
+          description: No Post Found
+  /comments/private/:post_id:
+    get:
+      summary: Retrieves all comments for a given post
+      tags:
+        - Comments
+      security: 
+        - JWT : []
+      parameters:
+        - name: post_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Comments retrieved
+          content:
+            application/json:
+              schema:
+                properties:
+                  comment_id:
+                    type: integer
+                  username:
+                    type: string
+                  comment_content:
+                    type: string
+                  uriDeleteComment:
+                    type: string
+                  showDeleteButton:
+                    type: boolean
+              example:
+                [
+                  {
+                    comment_id       : 11,
+                    username         : "user2",
+                    comment_content  : "papi is helping",
+                    uriDeleteComment : "/comments/11",
+                    showDeleteButton : true
+                  }
+                ]
+        304:
+          description: Comments unchanged from cache
+          content:
+            application/json:
+              example: 
+                  null
+        401:
+          description: Request not authorized
+        404:
+          description: No Post Found
+  /comments/private/:post_id/:user_id:
+    post:
+      summary: Creates comment for the given post and user with the given content
+      tags:
+        - Comments
+      security: 
+        - JWT: []
+      parameters:
+        - name: post_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string  
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                comment_content:
+                  type: string
+            example:
+              {
+                comment_content: this is an example comment,
+              }
+      responses:
+        201:
+          description: Comments created
+        400:
+          description: Request had no body
+        401:
+          description: User not authorized for that access
+        403:
+          description: User not permitted for that access
+        404:
+          description: Post Or user not found
+          content:
+            application/json:
+              examples:
+                user:
+                  value: "no user found"
+                post:
+                  value: "no post found"
+  /comments/private/:comment_id:
+    delete:
+      summary: Deletes comment with the given CommentID
+      tags:
+        - Comments
+      security: 
+        - JWT: []
+      parameters:
+        - name: comment_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Comment deleted
+        401:
+          description: User not authorized for that access
+        403:
+          description: User not permitted for that access
+        404:
+          description: No comment to delete
+          content:
+            application/json:
+              example: 
+                  "no comment to delete"
