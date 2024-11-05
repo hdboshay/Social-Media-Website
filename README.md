@@ -1,4 +1,4 @@
-# 6003-Web-API-Development  
+# Social Media Website
 Video Demo - https://youtu.be/u89-EsTAhoc
 ## TO START THE SERVER:
 
