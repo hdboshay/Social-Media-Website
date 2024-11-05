@@ -1,4 +1,6 @@
 # Social Media Website
+this was created as a uni project. below is the instructions to run it on your own machine otherwise use the link on my website to find a live demo
+
 Video Demo - https://youtu.be/u89-EsTAhoc
 ## TO START THE SERVER:
 
